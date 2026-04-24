@@ -59,6 +59,32 @@ export interface KPIOverview {
   total_orders: number;
   avg_aov: number;
   period_count: number;
+  growth_trends: {
+    recent_7_days: number;
+    overall_period: number;
+  };
+  best_day: {
+    date: string;
+    revenue: number;
+    orders: number;
+  };
+  worst_day: {
+    date: string;
+    revenue: number;
+    orders: number;
+  };
+  product_analysis: {
+    top_product: {
+      id: string;
+      revenue: number;
+    };
+    concentration_pct: number;
+  };
+  alerts_summary: {
+    total_alerts: number;
+    high_severity: number;
+    revenue_drops: number;
+  };
 }
 
 export interface PerformanceAnalysis {
@@ -162,7 +188,33 @@ class APIClient {
   }
 
   async getKPIOverview(period: 'daily' | 'weekly' | 'monthly' = 'daily'): Promise<KPIOverview> {
-    return this.request(`/kpis/overview?period=${period}`);
+    try {
+      const response = await this.request(`/kpis/overview?period=${period}`) as KPIOverview;
+      return {
+        total_revenue: response?.total_revenue || 0,
+        total_orders: response?.total_orders || 0,
+        avg_aov: response?.avg_aov || 0,
+        period_count: response?.period_count || 0,
+        growth_trends: response?.growth_trends || { recent_7_days: 0, overall_period: 0 },
+        best_day: response?.best_day || { date: '', revenue: 0, orders: 0 },
+        worst_day: response?.worst_day || { date: '', revenue: 0, orders: 0 },
+        product_analysis: response?.product_analysis || { top_product: { id: '', revenue: 0 }, concentration_pct: 0 },
+        alerts_summary: response?.alerts_summary || { total_alerts: 0, high_severity: 0, revenue_drops: 0 }
+      };
+    } catch (error) {
+      console.error('Error in getKPIOverview:', error);
+      return {
+        total_revenue: 0,
+        total_orders: 0,
+        avg_aov: 0,
+        period_count: 0,
+        growth_trends: { recent_7_days: 0, overall_period: 0 },
+        best_day: { date: '', revenue: 0, orders: 0 },
+        worst_day: { date: '', revenue: 0, orders: 0 },
+        product_analysis: { top_product: { id: '', revenue: 0 }, concentration_pct: 0 },
+        alerts_summary: { total_alerts: 0, high_severity: 0, revenue_drops: 0 }
+      };
+    }
   }
 
   // Revenue Trends
