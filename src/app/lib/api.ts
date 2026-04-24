@@ -177,7 +177,21 @@ class APIClient {
     if (startDate) params.append('start_date', startDate);
     if (endDate) params.append('end_date', endDate);
     
-    return this.request(`/revenue-trend?${params}`);
+    try {
+      const response = await this.request(`/revenue-trend?${params}`) as {data: any[], total_records: number};
+      return {
+        period,
+        data: Array.isArray(response?.data) ? response.data : [],
+        total_records: response?.total_records || 0
+      };
+    } catch (error) {
+      console.error('Error in getRevenueTrend:', error);
+      return {
+        period,
+        data: [],
+        total_records: 0
+      };
+    }
   }
 
   // Products
@@ -254,7 +268,21 @@ class APIClient {
     if (category) params.append('category', category);
     params.append('limit', limit.toString());
     
-    return this.request(`/sales?${params}`);
+    try {
+      const response = await this.request(`/sales?${params}`) as {data: any[], total_records: number, filters_applied: any};
+      return {
+        data: Array.isArray(response?.data) ? response.data : [],
+        total_records: response?.total_records || 0,
+        filters_applied: response?.filters_applied || {}
+      };
+    } catch (error) {
+      console.error('Error in getSalesData:', error);
+      return {
+        data: [],
+        total_records: 0,
+        filters_applied: {}
+      };
+    }
   }
 }
 
