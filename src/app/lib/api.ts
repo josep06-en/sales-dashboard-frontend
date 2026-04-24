@@ -2,7 +2,7 @@
  * API Integration Layer for Sales KPI Analytics Frontend
  * 
  * This module handles all communication with the backend API.
- * It's configured to work with the backend deployed on Supabase.
+ * It's configured to work with the backend deployed on Vercel.
  */
 
 // API Configuration

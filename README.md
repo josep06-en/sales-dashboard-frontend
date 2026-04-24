@@ -26,7 +26,7 @@ A modern, production-ready analytics dashboard that connects to the Sales KPI An
 This dashboard connects to the Sales KPI Analytics Backend API:
 
 - **Development**: `http://localhost:8000`
-- **Production**: Deployed on Supabase
+- **Production**: Deployed on Vercel
 
 ### API Endpoints Used
 
