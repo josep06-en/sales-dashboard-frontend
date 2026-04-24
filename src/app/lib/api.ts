@@ -109,7 +109,10 @@ class APIClient {
   }
 
   private async request<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
-    const url = `${this.baseURL}${endpoint}`;
+    // Remove trailing slash from baseURL and leading slash from endpoint to avoid double slashes
+    const cleanBaseURL = this.baseURL.replace(/\/$/, '');
+    const cleanEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
+    const url = `${cleanBaseURL}${cleanEndpoint}`;
     
     try {
       const response = await fetch(url, {

@@ -13,6 +13,6 @@
     }
   ],
   "env": {
-    "VITE_API_URL": "https://sales-kpi-backend.vercel.app"
+    "VITE_API_URL": "https://sales-dashboard-backend-two.vercel.app"
   }
 }
