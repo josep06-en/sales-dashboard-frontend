@@ -37,13 +37,13 @@ This repository contains:
 
 1. Push to GitHub using the commands above
 2. Connect to Vercel for automatic deployment
-3. Deploy backend on Supabase
+3. Deploy backend on Vercel
 4. Update environment variables with backend URL
 
 ## 5. Environment Variables
 
 The frontend uses these environment variables:
-- `VITE_API_URL` - Backend API URL (localhost:8000 for development, Supabase URL for production)
+- `VITE_API_URL` - Backend API URL (localhost:8000 for development, Vercel URL for production)
 
 Create `.env.local` for development:
 ```env

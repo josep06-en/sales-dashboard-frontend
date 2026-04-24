@@ -21,7 +21,7 @@ Your Sales KPI Analytics Dashboard is now uploaded to GitHub and ready for deplo
    - Install Command: `npm install`
 
 3. **Set Environment Variables**
-   - Add: `VITE_API_URL` = `https://your-backend-url.supabase.co`
+   - Add: `VITE_API_URL` = `https://your-backend-url.vercel.app`
    - (We'll update this after backend deployment)
 
 4. **Deploy**
@@ -52,7 +52,7 @@ Your Sales KPI Analytics Dashboard is now uploaded to GitHub and ready for deplo
 
 Once your frontend is deployed on Vercel, we'll:
 
-1. **Deploy Backend to Supabase**
+1. **Deploy Backend to Vercel**
 2. **Update Environment Variables**
 3. **Connect Frontend to Backend**
 
@@ -61,10 +61,10 @@ Once your frontend is deployed on Vercel, we'll:
 After deployment, you'll have:
 - **Frontend URL**: `https://your-app.vercel.app`
 - **Live Dashboard**: Fully functional analytics dashboard
-- **Real Data**: Connected to your Supabase backend
+- **Real Data**: Connected to your Vercel backend
 
 ---
 
 ## 🎯 Ready to Deploy!
 
-Your frontend is **100% ready** for Vercel deployment. Go ahead and deploy it manually, then we'll set up the backend on Supabase! 🚀
+Your frontend is **100% ready** for Vercel deployment. Go ahead and deploy it manually, then we'll set up the backend on Vercel! 🚀
