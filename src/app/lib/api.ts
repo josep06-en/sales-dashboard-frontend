@@ -147,7 +147,8 @@ class APIClient {
     if (startDate) params.append('start_date', startDate);
     if (endDate) params.append('end_date', endDate);
     
-    return this.request(`/kpis?${params}`);
+    const response = await this.request(`/kpis?${params}`) as {data: DailyKPI[] | WeeklyKPI[] | MonthlyKPI[]};
+    return response.data || [];
   }
 
   async getKPIOverview(period: 'daily' | 'weekly' | 'monthly' = 'daily'): Promise<KPIOverview> {
@@ -175,7 +176,8 @@ class APIClient {
     params.append('top_n', topN.toString());
     if (category) params.append('category', category);
     
-    return this.request(`/top-products?${params}`);
+    const response = await this.request(`/top-products?${params}`) as {data: ProductMetric[]};
+    return response.data || [];
   }
 
   async getProducts(topN?: number, category?: string, minRevenue?: number): Promise<ProductMetric[]> {
@@ -184,7 +186,8 @@ class APIClient {
     if (category) params.append('category', category);
     if (minRevenue) params.append('min_revenue', minRevenue.toString());
     
-    return this.request(`/products?${params}`);
+    const response = await this.request(`/products?${params}`) as {data: ProductMetric[]};
+    return response.data || [];
   }
 
   // Insights
@@ -198,7 +201,8 @@ class APIClient {
     if (alertType) params.append('alert_type', alertType);
     if (severity) params.append('severity', severity);
     
-    return this.request(`/alerts?${params}`);
+    const response = await this.request(`/alerts?${params}`) as {data: Alert[]};
+    return response.data || [];
   }
 
   // Analysis
