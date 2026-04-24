@@ -127,7 +127,12 @@ class APIClient {
         throw new Error(`API Error: ${response.status} - ${response.statusText}`);
       }
 
-      return await response.json();
+      const result = await response.json();
+      
+      // Log the response for debugging
+      console.log(`API Response for ${endpoint}:`, result);
+      
+      return result;
     } catch (error) {
       console.error(`API request failed for ${endpoint}:`, error);
       throw error;
@@ -147,8 +152,13 @@ class APIClient {
     if (startDate) params.append('start_date', startDate);
     if (endDate) params.append('end_date', endDate);
     
-    const response = await this.request(`/kpis?${params}`) as {data: DailyKPI[] | WeeklyKPI[] | MonthlyKPI[]};
-    return response.data || [];
+    try {
+      const response = await this.request(`/kpis?${params}`) as {data: DailyKPI[] | WeeklyKPI[] | MonthlyKPI[]};
+      return Array.isArray(response?.data) ? response.data : [];
+    } catch (error) {
+      console.error('Error in getKPIs:', error);
+      return [];
+    }
   }
 
   async getKPIOverview(period: 'daily' | 'weekly' | 'monthly' = 'daily'): Promise<KPIOverview> {
@@ -176,8 +186,13 @@ class APIClient {
     params.append('top_n', topN.toString());
     if (category) params.append('category', category);
     
-    const response = await this.request(`/top-products?${params}`) as {data: ProductMetric[]};
-    return response.data || [];
+    try {
+      const response = await this.request(`/top-products?${params}`) as {data: ProductMetric[]};
+      return Array.isArray(response?.data) ? response.data : [];
+    } catch (error) {
+      console.error('Error in getTopProducts:', error);
+      return [];
+    }
   }
 
   async getProducts(topN?: number, category?: string, minRevenue?: number): Promise<ProductMetric[]> {
@@ -186,8 +201,13 @@ class APIClient {
     if (category) params.append('category', category);
     if (minRevenue) params.append('min_revenue', minRevenue.toString());
     
-    const response = await this.request(`/products?${params}`) as {data: ProductMetric[]};
-    return response.data || [];
+    try {
+      const response = await this.request(`/products?${params}`) as {data: ProductMetric[]};
+      return Array.isArray(response?.data) ? response.data : [];
+    } catch (error) {
+      console.error('Error in getProducts:', error);
+      return [];
+    }
   }
 
   // Insights
@@ -201,8 +221,13 @@ class APIClient {
     if (alertType) params.append('alert_type', alertType);
     if (severity) params.append('severity', severity);
     
-    const response = await this.request(`/alerts?${params}`) as {data: Alert[]};
-    return response.data || [];
+    try {
+      const response = await this.request(`/alerts?${params}`) as {data: Alert[]};
+      return Array.isArray(response?.data) ? response.data : [];
+    } catch (error) {
+      console.error('Error in getAlerts:', error);
+      return [];
+    }
   }
 
   // Analysis
