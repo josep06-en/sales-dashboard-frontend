@@ -13,6 +13,6 @@
     }
   ],
   "env": {
-    "VITE_API_URL": "https://your-project-ref.supabase.co/functions/v1/sales-kpi-api"
+    "VITE_API_URL": "https://your-service-name.railway.app"
   }
 }
