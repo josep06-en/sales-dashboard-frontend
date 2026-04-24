@@ -13,6 +13,6 @@
     }
   ],
   "env": {
-    "VITE_API_URL": "https://your-service-name.railway.app"
+    "VITE_API_URL": "https://sales-kpi-backend.vercel.app"
   }
 }
