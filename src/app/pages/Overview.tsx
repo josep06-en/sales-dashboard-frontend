@@ -23,24 +23,16 @@ export function Overview() {
       setLoading(true);
       setError(null);
 
-      // Load all data in parallel
-      const [overview, revenueTrend, products, insightsData] = await Promise.all([
+      const [kpisData, overviewData, productsData, insightsData] = await Promise.all([
+        staticDataService.getKPIs(),
         staticDataService.getKPIOverview(),
-        staticDataService.getRevenueTrend(),
         staticDataService.getTopProducts(),
         staticDataService.getInsights()
       ]);
 
-      setKpiOverview(overview);
-      setRevenueData(revenueTrend?.map((item: RevenueTrend) => ({
-        date: formatDate(item.date),
-        revenue: item.revenue
-      })) || []);
-      setTopProducts(products?.map(product => ({
-        ...product,
-        name: product.product.length > 20 ? product.product.substring(0, 20) + '...' : product.product,
-        sales: product.revenue
-      })) || []);
+      console.log('Overview Data Loaded:', overviewData);
+      setKpiOverview(overviewData);
+      setTopProducts(productsData || []);
       setInsights(insightsData);
 
     } catch (err) {
@@ -79,6 +71,23 @@ export function Overview() {
           >
             Retry
           </button>
+        </div>
+      </div>
+    );
+  }
+
+  if (!kpiOverview) {
+    return (
+      <div className="space-y-8">
+        <div className="animate-pulse">
+          <div className="h-8 bg-gray-200 rounded w-48 mb-2"></div>
+          <div className="h-4 bg-gray-200 rounded w-96 mb-6"></div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            {[...Array(4)].map((_, i) => (
+              <div key={i} className="h-32 bg-gray-200 rounded"></div>
+            ))}
+          </div>
+          <div className="h-96 bg-gray-200 rounded"></div>
         </div>
       </div>
     );
