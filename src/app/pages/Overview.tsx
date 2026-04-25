@@ -23,17 +23,29 @@ export function Overview() {
       setLoading(true);
       setError(null);
 
-      const [kpisData, overviewData, productsData, insightsData] = await Promise.all([
+      const [kpisData, overviewData, productsData, insightsData, revenueTrendData] = await Promise.all([
         staticDataService.getKPIs(),
         staticDataService.getKPIOverview(),
         staticDataService.getTopProducts(),
-        staticDataService.getInsights()
+        staticDataService.getInsights(),
+        staticDataService.getRevenueTrend()
       ]);
 
       console.log('Overview Data Loaded:', overviewData);
+      console.log('Revenue Trend Data Loaded:', revenueTrendData);
+      
       setKpiOverview(overviewData);
       setTopProducts(productsData || []);
       setInsights(insightsData);
+      
+      // Transform revenue trend data for chart
+      if (revenueTrendData) {
+        const transformedData = revenueTrendData.map(item => ({
+          date: formatDate(item.date),
+          revenue: item.revenue
+        }));
+        setRevenueData(transformedData);
+      }
 
     } catch (err) {
       console.error('Failed to load dashboard data:', err);
