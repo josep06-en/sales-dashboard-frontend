@@ -93,7 +93,7 @@ export function Overview() {
           <KPICard 
             label="Total Revenue" 
             value={formatCurrency(kpiOverview?.total_revenue || 0)} 
-            trend={insights?.growth_trends.recent_7_days || 0} 
+            trend={kpiOverview?.growth_trends?.recent_7_days || 0} 
             subtitle="Last 7 days" 
           />
           <KPICard 
@@ -110,7 +110,7 @@ export function Overview() {
           />
           <KPICard 
             label="Growth Rate" 
-            value={formatPercentage(insights?.growth_trends.recent_7_days || 0)} 
+            value={formatPercentage(kpiOverview?.growth_trends?.recent_7_days || 0)} 
             trend={3.4} 
             subtitle="vs last period" 
           />
@@ -142,7 +142,7 @@ export function Overview() {
             <BarChart data={topProducts} layout="vertical">
               <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
               <XAxis type="number" stroke="var(--muted-foreground)" tickFormatter={(value) => formatCurrency(value)} />
-              <YAxis dataKey="name" type="category" stroke="var(--muted-foreground)" width={120} />
+              <YAxis dataKey="product" type="category" stroke="var(--muted-foreground)" width={120} />
               <Tooltip
                 formatter={(value: any) => [formatCurrency(value), 'Revenue']}
                 contentStyle={{
@@ -151,29 +151,29 @@ export function Overview() {
                   borderRadius: '8px'
                 }}
               />
-              <Bar dataKey="sales" fill="var(--blue)" radius={[0, 4, 4, 0]} />
+              <Bar dataKey="revenue" fill="var(--blue)" radius={[0, 4, 4, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </ChartContainer>
 
         <div className="space-y-4">
           <h3>Key Insights</h3>
-          {insights && (
+          {kpiOverview && (
             <>
               <InsightCard
                 title="Best Performance Day"
-                description={`${formatDate(insights.best_day.date)} achieved ${formatCurrency(insights.best_day.revenue)} in revenue with ${insights.best_day.orders} orders.`}
+                description={`${formatDate(kpiOverview.best_day?.date || '')} achieved ${formatCurrency(kpiOverview.best_day?.revenue || 0)} in revenue with ${formatNumber(kpiOverview.best_day?.orders || 0)} orders.`}
                 impact="high"
               />
               <InsightCard
                 title="Growth Trend"
-                description={`Recent 7-day growth is ${formatPercentage(insights.growth_trends.recent_7_days)} with overall period growth of ${formatPercentage(insights.growth_trends.overall_period)}.`}
-                impact={Math.abs(insights.growth_trends.recent_7_days) > 10 ? 'high' : 'medium'}
+                description={`Recent 7-day growth is ${formatPercentage(kpiOverview.growth_trends?.recent_7_days || 0)} with overall period growth of ${formatPercentage(kpiOverview.growth_trends?.overall_period || 0)}.`}
+                impact={Math.abs(kpiOverview.growth_trends?.recent_7_days || 0) > 10 ? 'high' : 'medium'}
               />
-              {insights.product_analysis.concentration_pct > 30 && (
+              {(kpiOverview.product_analysis?.concentration_pct || 0) > 30 && (
                 <InsightCard
                   title="Product Concentration Alert"
-                  description={`Top product represents ${formatPercentage(insights.product_analysis.concentration_pct)} of total revenue. Consider diversification.`}
+                  description={`Top product represents ${formatPercentage(kpiOverview.product_analysis?.concentration_pct || 0)} of total revenue. Consider diversification.`}
                   impact="high"
                 />
               )}
