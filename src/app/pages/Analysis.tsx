@@ -60,30 +60,30 @@ export function Analysis() {
       if (!categoryMap.has(category)) {
         categoryMap.set(category, {
           category: category.length > 15 ? category.substring(0, 15) + '...' : category,
-          total_revenue: 0,
-          total_orders: 0,
-          total_quantity: 0
+          revenue: 0,
+          orders: 0,
+          quantity: 0
         });
       }
       
       const cat = categoryMap.get(category);
-      cat.total_revenue += product.total_revenue;
-      cat.total_orders += product.unique_orders;
-      cat.total_quantity += product.total_quantity;
+      cat.revenue += product.revenue || 0;
+      cat.orders += 0; // Not available in new structure
+      cat.quantity += product.quantity || 0;
     });
 
     return Array.from(categoryMap.values())
-      .sort((a, b) => b.total_revenue - a.total_revenue)
+      .sort((a, b) => (b.revenue || 0) - (a.revenue || 0))
       .slice(0, 8);
   };
 
   const getRevenueTrendData = () => {
     return dailyKpis.map(kpi => ({
       date: formatDate(kpi.date),
-      revenue: kpi.daily_revenue,
-      orders: kpi.daily_orders,
-      aov: kpi.daily_aov,
-      growth: kpi.revenue_growth_pct || 0
+      revenue: kpi.revenue,
+      orders: 0, // Not available in new structure
+      aov: 0, // Not available in new structure
+      growth: 0 // Not available in new structure
     }));
   };
 
@@ -91,12 +91,12 @@ export function Analysis() {
     if (!analysis) return [];
     
     return [
-      { metric: 'Period Revenue', value: analysis.period_revenue, format: 'currency' },
-      { metric: 'Period Orders', value: analysis.period_orders, format: 'number' },
-      { metric: 'Avg Order Value', value: analysis.period_aov, format: 'currency' },
-      { metric: 'Daily Revenue', value: analysis.avg_daily_revenue, format: 'currency' },
-      { metric: 'Growth Rate', value: analysis.growth_rate, format: 'percentage' },
-      { metric: 'Volatility', value: analysis.revenue_volatility, format: 'currency' }
+      { metric: 'Best Product', value: analysis.best_product || 'N/A', format: 'text' },
+      { metric: 'Worst Product', value: analysis.worst_product || 'N/A', format: 'text' },
+      { metric: 'Trend', value: analysis.trend || 'N/A', format: 'text' },
+      { metric: 'Dominant Category', value: analysis.dominant_category || 'N/A', format: 'text' },
+      { metric: 'Total Products', value: analysis.total_products || 0, format: 'number' },
+      { metric: 'Revenue Volatility', value: (analysis.revenue_volatility || 0) * 100, format: 'percentage' }
     ];
   };
 
@@ -104,18 +104,17 @@ export function Analysis() {
     if (!analysis) return [];
     
     // Simulate conversion funnel based on available data
-    const visits = analysis.period_orders * 10; // Assume 10:1 visit to order ratio
-    const productViews = analysis.period_orders * 5; // Assume 5:1 product view to order ratio
-    const addToCart = Math.floor(analysis.period_orders * 1.3); // Assume some cart abandonment
-    const checkout = Math.floor(analysis.period_orders * 1.1); // Assume some checkout abandonment
-    const purchase = analysis.period_orders;
-
+    const totalProducts = analysis.total_products || 10;
+    const visits = totalProducts * 100; // Assume 100 visits per product
+    const productViews = totalProducts * 50; // Assume 50 views per product
+    const addToCart = Math.floor(totalProducts * 15); // Assume some cart abandonment
+    const checkout = totalProducts * 5; // Actual orders
+    
     return [
       { stage: 'Visits', count: visits, conversion: 100 },
-      { stage: 'Product Views', count: productViews, conversion: (productViews / visits) * 100 },
-      { stage: 'Add to Cart', count: addToCart, conversion: (addToCart / visits) * 100 },
-      { stage: 'Checkout', count: checkout, conversion: (checkout / visits) * 100 },
-      { stage: 'Purchase', count: purchase, conversion: (purchase / visits) * 100 }
+      { stage: 'Product Views', count: productViews, conversion: Math.round(productViews / visits * 100) },
+      { stage: 'Add to Cart', count: addToCart, conversion: Math.round(addToCart / visits * 100) },
+      { stage: 'Checkout', count: checkout, conversion: Math.round(checkout / visits * 100) }
     ];
   };
 
@@ -191,9 +190,9 @@ export function Analysis() {
             <div key={index} className="bg-white border rounded-lg p-4">
               <h4 className="text-sm font-medium text-gray-600 mb-1">{metric.metric}</h4>
               <p className="text-2xl font-bold">
-                {metric.format === 'currency' && formatCurrency(metric.value)}
-                {metric.format === 'number' && formatNumber(metric.value)}
-                {metric.format === 'percentage' && `${(metric.value).toFixed(1)}%`}
+                {metric.format === 'currency' && formatCurrency(typeof metric.value === 'number' ? metric.value : 0)}
+                {metric.format === 'number' && formatNumber(typeof metric.value === 'number' ? metric.value : 0)}
+                {metric.format === 'percentage' && `${(typeof metric.value === 'number' ? metric.value : 0).toFixed(1)}%`}
               </p>
             </div>
           ))}
@@ -214,7 +213,7 @@ export function Analysis() {
                 borderRadius: '8px'
               }}
             />
-            <Bar dataKey="total_revenue" fill="var(--blue)" name="Total Revenue" radius={[4, 4, 0, 0]} />
+            <Bar dataKey="revenue" fill="var(--blue)" name="Total Revenue" radius={[4, 4, 0, 0]} />
           </BarChart>
         </ResponsiveContainer>
       </ChartContainer>
@@ -247,9 +246,9 @@ export function Analysis() {
         <ChartContainer title="Top Products Performance">
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={products.slice(0, 8).map(p => ({
-              name: p.product_id.length > 20 ? p.product_id.substring(0, 20) + '...' : p.product_id,
-              revenue: p.total_revenue,
-              orders: p.unique_orders
+              name: p.product.length > 20 ? p.product.substring(0, 20) + '...' : p.product,
+              revenue: p.revenue || 0,
+              orders: 0 // Not available in new structure
             }))} layout="horizontal">
               <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
               <XAxis type="number" stroke="var(--muted-foreground)" tickFormatter={(value: number) => formatCurrency(value)} />

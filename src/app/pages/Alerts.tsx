@@ -62,15 +62,34 @@ export function Alerts() {
   };
 
   const getAlertDescription = (alert: Alert) => {
+    // Extract percentage from message if needed
+    const extractPercentage = (message: string) => {
+      const match = message.match(/(\d+\.?\d*)%/);
+      return match ? parseFloat(match[1]) : 0;
+    };
+    
+    const extractDate = (message: string) => {
+      const match = message.match(/(\d{4}-\d{2}-\d{2})/);
+      return match ? match[1] : '';
+    };
+
     switch (alert.type) {
       case 'revenue_drop':
-        return `Revenue decreased by ${formatPercentage(alert.value)} on ${formatDate(alert.date)}. This may indicate market changes or operational issues.`;
+        const dropPercent = extractPercentage(alert.message);
+        const dropDate = extractDate(alert.message);
+        return `Revenue decreased by ${formatPercentage(dropPercent)} on ${formatDate(dropDate)}. This may indicate market changes or operational issues.`;
       case 'revenue_spike':
-        return `Revenue increased by ${formatPercentage(alert.value)} on ${formatDate(alert.date)}. This represents unusually strong performance.`;
+        const spikePercent = extractPercentage(alert.message);
+        const spikeDate = extractDate(alert.message);
+        return `Revenue increased by ${formatPercentage(spikePercent)} on ${formatDate(spikeDate)}. This represents unusually strong performance.`;
       case 'product_concentration':
-        return `Top product represents ${formatPercentage(alert.value)} of total revenue. High concentration may indicate dependency risk.`;
+        const concPercent = extractPercentage(alert.message);
+        return `Top product represents ${formatPercentage(concPercent)} of total revenue. High concentration may indicate dependency risk.`;
+      case 'low_orders':
+        const orderDate = extractDate(alert.message);
+        return `Low order volume detected on ${formatDate(orderDate)}. Consider marketing interventions.`;
       default:
-        return `Alert triggered on ${formatDate(alert.date)} with value ${formatPercentage(alert.value)}.`;
+        return alert.message;
     }
   };
 
@@ -87,15 +106,43 @@ export function Alerts() {
     }
   };
 
-  const getAlertMetric = (alert: Alert) => {
+  const getAlertValue = (alert: Alert) => {
+    // Extract percentage from message
+    const extractPercentage = (message: string) => {
+      const match = message.match(/(\d+\.?\d*)%/);
+      return match ? parseFloat(match[1]) : 0;
+    };
+
     switch (alert.type) {
       case 'revenue_drop':
       case 'revenue_spike':
-        return `Change: ${formatPercentage(alert.value)}`;
+        const percent = extractPercentage(alert.message);
+        return `Change: ${formatPercentage(percent)}`;
       case 'product_concentration':
-        return `Concentration: ${formatPercentage(alert.value)}`;
+        const concPercent = extractPercentage(alert.message);
+        return `Concentration: ${formatPercentage(concPercent)}`;
       default:
-        return `Value: ${formatPercentage(alert.value)}`;
+        return alert.message;
+    }
+  };
+
+  const getAlertMetric = (alert: Alert) => {
+    // Extract percentage from message for metric display
+    const extractPercentage = (message: string) => {
+      const match = message.match(/(\d+\.?\d*)%/);
+      return match ? parseFloat(match[1]) : 0;
+    };
+
+    switch (alert.type) {
+      case 'revenue_drop':
+      case 'revenue_spike':
+        const percent = extractPercentage(alert.message);
+        return formatPercentage(percent);
+      case 'product_concentration':
+        const concPercent = extractPercentage(alert.message);
+        return formatPercentage(concPercent);
+      default:
+        return 'N/A';
     }
   };
 
