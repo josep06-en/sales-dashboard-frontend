@@ -1,16 +1,16 @@
 import { useState, useEffect } from 'react';
 import { ChartContainer } from '../components/ChartContainer';
 import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, ComposedChart } from 'recharts';
-import { apiClient, formatCurrency, formatNumber, formatDate } from '../lib/api';
-import type { ProductMetric, PerformanceAnalysis, DailyKPI } from '../lib/api';
+import { staticDataService, formatCurrency, formatNumber, formatDate } from '../lib/static-data';
+import type { TopProduct, Analysis, RevenueTrend } from '../lib/static-data';
 
 export function Analysis() {
   const [loading, setLoading] = useState(true);
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
-  const [analysis, setAnalysis] = useState<PerformanceAnalysis | null>(null);
-  const [products, setProducts] = useState<ProductMetric[]>([]);
-  const [dailyKpis, setDailyKpis] = useState<DailyKPI[]>([]);
+  const [analysis, setAnalysis] = useState<Analysis | null>(null);
+  const [products, setProducts] = useState<TopProduct[]>([]);
+  const [dailyKpis, setDailyKpis] = useState<RevenueTrend[]>([]);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -35,14 +35,14 @@ export function Analysis() {
       setError(null);
 
       const [analysisData, productsData, kpisData] = await Promise.all([
-        apiClient.getPerformanceAnalysis(startDate, endDate),
-        apiClient.getTopProducts(20),
-        apiClient.getKPIs('daily', startDate, endDate)
+        staticDataService.getAnalysis(),
+        staticDataService.getTopProducts(),
+        staticDataService.getRevenueTrend()
       ]);
 
       setAnalysis(analysisData);
-      setProducts(productsData);
-      setDailyKpis(kpisData as DailyKPI[]);
+      setProducts(productsData || []);
+      setDailyKpis(kpisData || []);
 
     } catch (err) {
       console.error('Failed to load analysis data:', err);

@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react';
 import { ChartContainer } from '../components/ChartContainer';
 import { LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
-import { apiClient, formatCurrency, formatNumber, formatDate } from '../lib/api';
-import type { DailyKPI, WeeklyKPI, MonthlyKPI } from '../lib/api';
+import { staticDataService, formatCurrency, formatNumber, formatDate } from '../lib/static-data';
+import type { RevenueTrend } from '../lib/static-data';
 
 export function Metrics() {
   const [loading, setLoading] = useState(true);
   const [period, setPeriod] = useState<'daily' | 'weekly' | 'monthly'>('daily');
-  const [kpis, setKpis] = useState<DailyKPI[] | WeeklyKPI[] | MonthlyKPI[]>([]);
+  const [kpis, setKpis] = useState<RevenueTrend[]>([]);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -19,8 +19,8 @@ export function Metrics() {
       setLoading(true);
       setError(null);
 
-      const data = await apiClient.getKPIs(period);
-      setKpis(data);
+      const data = await staticDataService.getRevenueTrend();
+      setKpis(data || []);
 
     } catch (err) {
       console.error('Failed to load metrics data:', err);

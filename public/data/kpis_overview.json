@@ -1,0 +1,32 @@
+{
+  "total_revenue": 4807745.62,
+  "total_orders": 2647,
+  "avg_aov": 1816.3,
+  "period_count": 90,
+  "growth_trends": {
+    "recent_7_days": -3.15,
+    "overall_period": 4.95
+  },
+  "best_day": {
+    "date": "2024-01-08",
+    "revenue": 91746.69,
+    "orders": 0
+  },
+  "worst_day": {
+    "date": "2024-03-21",
+    "revenue": 20256.08,
+    "orders": 0
+  },
+  "product_analysis": {
+    "top_product": {
+      "id": "USB Hub",
+      "revenue": 528311.59
+    },
+    "concentration_pct": 10.99
+  },
+  "alerts_summary": {
+    "total_alerts": 3,
+    "high_severity": 1,
+    "revenue_drops": 2
+  }
+}

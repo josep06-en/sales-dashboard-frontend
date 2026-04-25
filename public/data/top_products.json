@@ -1,0 +1,72 @@
+[
+  {
+    "product": "USB Hub",
+    "revenue": 528311.59,
+    "category": "Furniture",
+    "quantity": 852,
+    "avg_price": 620.08
+  },
+  {
+    "product": "Headset Wireless",
+    "revenue": 523784.26,
+    "category": "Furniture",
+    "quantity": 872,
+    "avg_price": 600.67
+  },
+  {
+    "product": "Laptop Pro",
+    "revenue": 522381.74,
+    "category": "Accessories",
+    "quantity": 850,
+    "avg_price": 614.57
+  },
+  {
+    "product": "Desk Lamp",
+    "revenue": 517021.74,
+    "category": "Furniture",
+    "quantity": 809,
+    "avg_price": 639.09
+  },
+  {
+    "product": "Webcam HD",
+    "revenue": 476898.46,
+    "category": "Furniture",
+    "quantity": 779,
+    "avg_price": 612.19
+  },
+  {
+    "product": "Monitor 4K",
+    "revenue": 475981.37,
+    "category": "Electronics",
+    "quantity": 747,
+    "avg_price": 637.19
+  },
+  {
+    "product": "Wireless Mouse",
+    "revenue": 473158.33,
+    "category": "Furniture",
+    "quantity": 794,
+    "avg_price": 595.92
+  },
+  {
+    "product": "Keyboard Mechanical",
+    "revenue": 454220.37,
+    "category": "Electronics",
+    "quantity": 744,
+    "avg_price": 610.51
+  },
+  {
+    "product": "Office Chair",
+    "revenue": 422065.29,
+    "category": "Furniture",
+    "quantity": 704,
+    "avg_price": 599.52
+  },
+  {
+    "product": "Standing Desk",
+    "revenue": 413922.47,
+    "category": "Furniture",
+    "quantity": 735,
+    "avg_price": 563.16
+  }
+]

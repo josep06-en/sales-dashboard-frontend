@@ -1,0 +1,187 @@
+[
+  {
+    "type": "revenue_drop",
+    "message": "Revenue dropped 33.3% on 2024-01-03",
+    "severity": "high"
+  },
+  {
+    "type": "revenue_drop",
+    "message": "Revenue dropped 32.7% on 2024-01-06",
+    "severity": "high"
+  },
+  {
+    "type": "revenue_drop",
+    "message": "Revenue dropped 22.3% on 2024-01-07",
+    "severity": "medium"
+  },
+  {
+    "type": "revenue_drop",
+    "message": "Revenue dropped 27.2% on 2024-01-09",
+    "severity": "medium"
+  },
+  {
+    "type": "revenue_drop",
+    "message": "Revenue dropped 25.5% on 2024-01-10",
+    "severity": "medium"
+  },
+  {
+    "type": "revenue_drop",
+    "message": "Revenue dropped 25.9% on 2024-01-14",
+    "severity": "medium"
+  },
+  {
+    "type": "revenue_drop",
+    "message": "Revenue dropped 61.0% on 2024-01-17",
+    "severity": "high"
+  },
+  {
+    "type": "revenue_drop",
+    "message": "Revenue dropped 50.3% on 2024-01-19",
+    "severity": "high"
+  },
+  {
+    "type": "revenue_drop",
+    "message": "Revenue dropped 30.8% on 2024-01-21",
+    "severity": "high"
+  },
+  {
+    "type": "revenue_drop",
+    "message": "Revenue dropped 56.3% on 2024-01-24",
+    "severity": "high"
+  },
+  {
+    "type": "revenue_drop",
+    "message": "Revenue dropped 28.8% on 2024-01-27",
+    "severity": "medium"
+  },
+  {
+    "type": "revenue_drop",
+    "message": "Revenue dropped 26.9% on 2024-01-30",
+    "severity": "medium"
+  },
+  {
+    "type": "revenue_drop",
+    "message": "Revenue dropped 53.4% on 2024-02-03",
+    "severity": "high"
+  },
+  {
+    "type": "revenue_drop",
+    "message": "Revenue dropped 60.1% on 2024-02-05",
+    "severity": "high"
+  },
+  {
+    "type": "revenue_drop",
+    "message": "Revenue dropped 45.1% on 2024-02-07",
+    "severity": "high"
+  },
+  {
+    "type": "revenue_drop",
+    "message": "Revenue dropped 26.8% on 2024-02-11",
+    "severity": "medium"
+  },
+  {
+    "type": "revenue_drop",
+    "message": "Revenue dropped 24.2% on 2024-02-12",
+    "severity": "medium"
+  },
+  {
+    "type": "revenue_drop",
+    "message": "Revenue dropped 62.1% on 2024-02-15",
+    "severity": "high"
+  },
+  {
+    "type": "revenue_drop",
+    "message": "Revenue dropped 33.1% on 2024-02-18",
+    "severity": "high"
+  },
+  {
+    "type": "revenue_drop",
+    "message": "Revenue dropped 30.1% on 2024-02-19",
+    "severity": "high"
+  },
+  {
+    "type": "revenue_drop",
+    "message": "Revenue dropped 36.6% on 2024-02-21",
+    "severity": "high"
+  },
+  {
+    "type": "revenue_drop",
+    "message": "Revenue dropped 31.1% on 2024-02-24",
+    "severity": "high"
+  },
+  {
+    "type": "revenue_drop",
+    "message": "Revenue dropped 30.1% on 2024-02-27",
+    "severity": "high"
+  },
+  {
+    "type": "revenue_drop",
+    "message": "Revenue dropped 46.1% on 2024-03-01",
+    "severity": "high"
+  },
+  {
+    "type": "revenue_drop",
+    "message": "Revenue dropped 29.3% on 2024-03-03",
+    "severity": "medium"
+  },
+  {
+    "type": "revenue_drop",
+    "message": "Revenue dropped 32.8% on 2024-03-05",
+    "severity": "high"
+  },
+  {
+    "type": "revenue_drop",
+    "message": "Revenue dropped 33.6% on 2024-03-08",
+    "severity": "high"
+  },
+  {
+    "type": "revenue_drop",
+    "message": "Revenue dropped 41.8% on 2024-03-12",
+    "severity": "high"
+  },
+  {
+    "type": "revenue_drop",
+    "message": "Revenue dropped 45.7% on 2024-03-18",
+    "severity": "high"
+  },
+  {
+    "type": "revenue_drop",
+    "message": "Revenue dropped 30.2% on 2024-03-20",
+    "severity": "high"
+  },
+  {
+    "type": "revenue_drop",
+    "message": "Revenue dropped 61.6% on 2024-03-21",
+    "severity": "high"
+  },
+  {
+    "type": "revenue_drop",
+    "message": "Revenue dropped 53.3% on 2024-03-23",
+    "severity": "high"
+  },
+  {
+    "type": "revenue_drop",
+    "message": "Revenue dropped 39.3% on 2024-03-28",
+    "severity": "high"
+  },
+  {
+    "type": "revenue_drop",
+    "message": "Revenue dropped 29.4% on 2024-03-30",
+    "severity": "medium"
+  },
+  {
+    "type": "low_orders",
+    "message": "Low order volume on 2024-01-01: 16 orders",
+    "severity": "medium"
+  },
+  {
+    "type": "low_orders",
+    "message": "Low order volume on 2024-01-15: 20 orders",
+    "severity": "medium"
+  },
+  {
+    "type": "low_orders",
+    "message": "Low order volume on 2024-01-17: 15 orders",
+    "severity": "medium"
+  }
+]

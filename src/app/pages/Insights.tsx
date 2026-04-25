@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react';
 import { InsightCard } from '../components/InsightCard';
-import { apiClient, formatCurrency, formatNumber, formatPercentage, formatDate } from '../lib/api';
-import type { Insights, ProductMetric } from '../lib/api';
+import { staticDataService, formatCurrency, formatNumber, formatPercentage, formatDate } from '../lib/static-data';
+import type { Insights, TopProduct, Analysis } from '../lib/static-data';
 
 export function Insights() {
   const [loading, setLoading] = useState(true);
   const [insights, setInsights] = useState<Insights | null>(null);
-  const [topProducts, setTopProducts] = useState<ProductMetric[]>([]);
-  const [summary, setSummary] = useState<any>(null);
+  const [topProducts, setTopProducts] = useState<TopProduct[]>([]);
+  const [kpiOverview, setKpiOverview] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -19,15 +19,15 @@ export function Insights() {
       setLoading(true);
       setError(null);
 
-      const [insightsData, productsData, summaryData] = await Promise.all([
-        apiClient.getInsights(),
-        apiClient.getTopProducts(10),
-        apiClient.getSummary()
+      const [insightsData, productsData, overviewData] = await Promise.all([
+        staticDataService.getInsights(),
+        staticDataService.getTopProducts(),
+        staticDataService.getKPIOverview()
       ]);
 
       setInsights(insightsData);
-      setTopProducts(productsData);
-      setSummary(summaryData);
+      setTopProducts(productsData || []);
+      setKpiOverview(overviewData);
 
     } catch (err) {
       console.error('Failed to load insights data:', err);
@@ -82,18 +82,18 @@ export function Insights() {
             <div className="space-y-4">
               <InsightCard
                 title="Best Performance Day"
-                description={`${formatDate(insights.best_day.date)} achieved ${formatCurrency(insights.best_day.revenue)} in revenue with ${formatNumber(insights.best_day.orders)} orders.`}
+                description={`${formatDate(kpiOverview?.best_day?.date || '')} achieved ${formatCurrency(kpiOverview?.best_day?.revenue || 0)} in revenue with ${formatNumber(kpiOverview?.best_day?.orders || 0)} orders.`}
                 impact="high"
               />
               <InsightCard
                 title="Worst Performance Day"
-                description={`${formatDate(insights.worst_day.date)} recorded ${formatCurrency(insights.worst_day.revenue)} in revenue with ${formatNumber(insights.worst_day.orders)} orders.`}
-                impact={insights.worst_day.revenue < insights.best_day.revenue * 0.5 ? 'high' : 'medium'}
+                description={`${formatDate(kpiOverview?.worst_day?.date || '')} recorded ${formatCurrency(kpiOverview?.worst_day?.revenue || 0)} in revenue with ${formatNumber(kpiOverview?.worst_day?.orders || 0)} orders.`}
+                impact={(kpiOverview?.worst_day?.revenue || 0) < (kpiOverview?.best_day?.revenue || 0) * 0.5 ? 'high' : 'medium'}
               />
               <InsightCard
                 title="Growth Analysis"
-                description={`Recent 7-day growth is ${formatPercentage(insights.growth_trends.recent_7_days)} with overall period growth of ${formatPercentage(insights.growth_trends.overall_period)}.`}
-                impact={Math.abs(insights.growth_trends.recent_7_days) > 10 ? 'high' : 'medium'}
+                description={`Recent 7-day growth is ${formatPercentage(kpiOverview?.growth_trends?.recent_7_days || 0)} with overall period growth of ${formatPercentage(kpiOverview?.growth_trends?.overall_period || 0)}.`}
+                impact={Math.abs(kpiOverview?.growth_trends?.recent_7_days || 0) > 10 ? 'high' : 'medium'}
               />
             </div>
           </div>
@@ -103,13 +103,13 @@ export function Insights() {
             <div className="space-y-4">
               <InsightCard
                 title="Top Product Performance"
-                description={`Product ${insights.product_analysis.top_product.id} leads with ${formatCurrency(insights.product_analysis.top_product.revenue)} in revenue.`}
+                description={`Product ${kpiOverview?.product_analysis?.top_product?.id || 'N/A'} leads with ${formatCurrency(kpiOverview?.product_analysis?.top_product?.revenue || 0)} in revenue.`}
                 impact="high"
               />
-              {insights.product_analysis.concentration_pct > 30 && (
+              {(kpiOverview?.product_analysis?.concentration_pct || 0) > 30 && (
                 <InsightCard
                   title="Product Concentration Risk"
-                  description={`Top product represents ${formatPercentage(insights.product_analysis.concentration_pct)} of total revenue. Consider diversification strategies.`}
+                  description={`Top product represents ${formatPercentage(kpiOverview?.product_analysis?.concentration_pct || 0)} of total revenue. Consider diversification strategies.`}
                   impact="high"
                 />
               )}
@@ -117,8 +117,8 @@ export function Insights() {
                 <InsightCard
                   title="Product Portfolio Balance"
                   description={`Top 3 products account for ${formatPercentage(
-                    (topProducts.slice(0, 3).reduce((sum, p) => sum + p.total_revenue, 0) / 
-                     topProducts.reduce((sum, p) => sum + p.total_revenue, 0)) * 100
+                    (topProducts.slice(0, 3).reduce((sum, p) => sum + p.revenue, 0) / 
+                     topProducts.reduce((sum, p) => sum + p.revenue, 0)) * 100
                   )} of total revenue across ${formatNumber(topProducts.length)} products.`}
                   impact={topProducts.length < 10 ? 'medium' : 'low'}
                 />
@@ -131,19 +131,19 @@ export function Insights() {
             <div className="space-y-4">
               <InsightCard
                 title="Alert Summary"
-                description={`${formatNumber(insights.alerts_summary.total_alerts)} active alerts including ${formatNumber(insights.alerts_summary.high_severity)} high severity and ${formatNumber(insights.alerts_summary.revenue_drops)} revenue drop alerts.`}
-                impact={insights.alerts_summary.high_severity > 0 ? 'high' : 'medium'}
+                description={`${formatNumber(kpiOverview?.alerts_summary?.total_alerts || 0)} active alerts including ${formatNumber(kpiOverview?.alerts_summary?.high_severity || 0)} high severity and ${formatNumber(kpiOverview?.alerts_summary?.revenue_drops || 0)} revenue drop alerts.`}
+                impact={(kpiOverview?.alerts_summary?.high_severity || 0) > 0 ? 'high' : 'medium'}
               />
-              {summary && (
+              {kpiOverview && (
                 <>
                   <InsightCard
                     title="Overall Business Scale"
-                    description={`Total revenue of ${formatCurrency(summary.total_revenue)} from ${formatNumber(summary.total_orders)} orders with average order value of ${formatCurrency(summary.total_revenue / summary.total_orders)}.`}
+                    description={`Total revenue of ${formatCurrency(kpiOverview.total_revenue)} from ${formatNumber(kpiOverview.total_orders)} orders with average order value of ${formatCurrency(kpiOverview.avg_aov)}.`}
                     impact="medium"
                   />
                   <InsightCard
                     title="Data Coverage"
-                    description={`Analytics cover ${formatNumber(summary.period_count)} data points from ${formatDate(summary.date_range?.start)} to ${formatDate(summary.date_range?.end)}.`}
+                    description={`Analytics cover ${formatNumber(kpiOverview.period_count)} data points.`}
                     impact="low"
                   />
                 </>
@@ -157,9 +157,9 @@ export function Insights() {
               <div className="space-y-4">
                 {topProducts.slice(0, 3).map((product, index) => (
                   <InsightCard
-                    key={product.product_id}
-                    title={`#${index + 1} Product: ${product.product_id}`}
-                    description={`${formatCurrency(product.total_revenue)} revenue from ${formatNumber(product.unique_orders)} orders with average price of ${formatCurrency(product.avg_price)} in ${product.category} category.`}
+                    key={product.product}
+                    title={`#${index + 1} Product: ${product.product}`}
+                    description={`${formatCurrency(product.revenue)} revenue with average price of ${formatCurrency(product.avg_price)} in ${product.category} category.`}
                     impact={index === 0 ? 'high' : index === 1 ? 'medium' : 'low'}
                   />
                 ))}

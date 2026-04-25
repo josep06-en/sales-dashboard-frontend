@@ -3,14 +3,14 @@ import { KPICard } from '../components/KPICard';
 import { ChartContainer } from '../components/ChartContainer';
 import { InsightCard } from '../components/InsightCard';
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { apiClient, formatCurrency, formatNumber, formatPercentage, formatDate } from '../lib/api';
-import type { KPIOverview, DailyKPI, ProductMetric, Insights } from '../lib/api';
+import { staticDataService, formatCurrency, formatNumber, formatPercentage, formatDate } from '../lib/static-data';
+import type { KPIOverview, RevenueTrend, TopProduct, Insights } from '../lib/static-data';
 
 export function Overview() {
   const [loading, setLoading] = useState(true);
   const [kpiOverview, setKpiOverview] = useState<KPIOverview | null>(null);
   const [revenueData, setRevenueData] = useState<any[]>([]);
-  const [topProducts, setTopProducts] = useState<ProductMetric[]>([]);
+  const [topProducts, setTopProducts] = useState<TopProduct[]>([]);
   const [insights, setInsights] = useState<Insights | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -25,22 +25,22 @@ export function Overview() {
 
       // Load all data in parallel
       const [overview, revenueTrend, products, insightsData] = await Promise.all([
-        apiClient.getKPIOverview('daily'),
-        apiClient.getRevenueTrend('daily'),
-        apiClient.getTopProducts(5),
-        apiClient.getInsights()
+        staticDataService.getKPIOverview(),
+        staticDataService.getRevenueTrend(),
+        staticDataService.getTopProducts(),
+        staticDataService.getInsights()
       ]);
 
       setKpiOverview(overview);
-      setRevenueData(revenueTrend.data.map((item: any) => ({
-        date: formatDate(item.date || item.month || item.week),
-        revenue: item.daily_revenue || item.weekly_revenue || item.monthly_revenue
-      })));
-      setTopProducts(products.map(product => ({
+      setRevenueData(revenueTrend?.map((item: RevenueTrend) => ({
+        date: formatDate(item.date),
+        revenue: item.revenue
+      })) || []);
+      setTopProducts(products?.map(product => ({
         ...product,
-        name: product.product_id.length > 20 ? product.product_id.substring(0, 20) + '...' : product.product_id,
-        sales: product.total_revenue
-      })));
+        name: product.product.length > 20 ? product.product.substring(0, 20) + '...' : product.product,
+        sales: product.revenue
+      })) || []);
       setInsights(insightsData);
 
     } catch (err) {

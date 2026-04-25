@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { AlertCard } from '../components/AlertCard';
 import { CheckCircle, AlertTriangle, Info } from 'lucide-react';
-import { apiClient, formatPercentage, formatDate, getSeverityColor } from '../lib/api';
-import type { Alert } from '../lib/api';
+import { staticDataService, formatPercentage, formatDate, getSeverityColor } from '../lib/static-data';
+import type { Alert } from '../lib/static-data';
 
 export function Alerts() {
   const [loading, setLoading] = useState(true);
@@ -19,8 +19,8 @@ export function Alerts() {
       setLoading(true);
       setError(null);
 
-      const data = await apiClient.getAlerts();
-      setAlerts(data);
+      const data = await staticDataService.getAlerts();
+      setAlerts(data || []);
 
     } catch (err) {
       console.error('Failed to load alerts:', err);
